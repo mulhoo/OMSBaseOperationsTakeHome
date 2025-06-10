@@ -61,4 +61,17 @@ router.get('/recent/:locationId', async (req, res) => {
   }
 });
 
+// get all locations
+router.get('/locations', async (req, res) => {
+  try {
+    const query = 'SELECT * FROM locations ORDER BY name';
+    const result = await req.app.locals.db.query(query);
+
+    res.json(result.rows);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
 module.exports = router;

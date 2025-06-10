@@ -3,6 +3,36 @@ const request = require('supertest');
 const app = require('../app');
 
 describe('Events API Endpoints', () => {
+
+  describe('GET /api/events/locations', () => {
+    it('should return all locations', async () => {
+      const response = await request(app)
+        .get('/api/events/locations')
+        .expect('Content-Type', /json/)
+        .expect(200);
+
+      expect(Array.isArray(response.body)).toBe(true);
+      expect(response.body.length).toBeGreaterThan(0);
+
+      const location = response.body[0];
+      expect(location).toHaveProperty('id');
+      expect(location).toHaveProperty('name');
+      expect(location).toHaveProperty('timezone');
+      expect(typeof location.id).toBe('number');
+      expect(typeof location.name).toBe('string');
+    });
+
+    it('should return locations ordered by name', async () => {
+      const response = await request(app)
+        .get('/api/events/locations')
+        .expect(200);
+
+      const names = response.body.map(loc => loc.name);
+      const sortedNames = [...names].sort();
+      expect(names).toEqual(sortedNames);
+    });
+  });
+
   describe('GET /api/events/monthly/:locationId', () => {
     it('should return monthly time series for valid location', async () => {
       const response = await request(app)
@@ -19,7 +49,7 @@ describe('Events API Endpoints', () => {
         expect(dataPoint).toHaveProperty('month');
         expect(dataPoint).toHaveProperty('total_count');
         expect(dataPoint).toHaveProperty('location_name');
-        expect(typeof dataPoint.total_count).toBe('string'); // PostgreSQL returns as string
+        expect(typeof dataPoint.total_count).toBe('string');
         expect(new Date(dataPoint.month)).toBeInstanceOf(Date);
       }
     });
