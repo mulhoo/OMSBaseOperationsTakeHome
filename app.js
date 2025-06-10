@@ -10,6 +10,7 @@ const cors = require('cors');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var eventsRouter = require('./routes/events');
 
 var app = express();
 
@@ -19,6 +20,9 @@ const pool = new Pool({
   port: process.env.DBPORT,
   user: process.env.DBUSER,
   password: process.env.DBPASSWORD,
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
 
 app.locals.db = pool;
@@ -30,8 +34,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
+app.use('/api', indexRouter);
 app.use('/users', usersRouter);
+app.use('/api/events', eventsRouter);
 
 app.use(function(req, res, next) {
   next(createError(404));

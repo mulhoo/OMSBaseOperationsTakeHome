@@ -6,7 +6,10 @@
     "start": "node ./bin/www",
     "dev": "nodemon ./bin/www",
     "frontend": "cd frontend && npm start",
-    "dev-full": "npm run dev & npm run frontend"
+    "dev-full": "npm run dev & npm run frontend",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -18,7 +21,21 @@
     "pg": "^8.16.0"
   },
   "devDependencies": {
+    "@types/jest": "^27.5.2",
     "concurrently": "^9.1.2",
-    "nodemon": "^3.1.10"
+    "jest": "^27.5.1",
+    "nodemon": "^3.1.10",
+    "supertest": "^7.1.1"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "collectCoverageFrom": [
+      "routes/**/*.js",
+      "app.js"
+    ],
+    "coverageDirectory": "coverage",
+    "testMatch": [
+      "**/tests/**/*.test.js"
+    ]
   }
 }
