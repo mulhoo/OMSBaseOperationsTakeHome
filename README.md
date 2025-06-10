@@ -25,3 +25,6 @@ npm run frontend
 ```
 
 I would add indexes on location and dates, since those will be the main two points I would be needing to query on.
+
+## Known Issue:
+Data Quality Note: The source data contains a typo where "San Francisco" is spelled as "San Fransisco" in the database. The dashboard displays the data as-is from the source.
